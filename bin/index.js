@@ -64,6 +64,7 @@ if(args.c || args.clean) {
 }
 else {
     ss.build(args.r || args.rebuild, {
-        server: args.server
+        server: args.server,
+        debug: args.debug
     });
 }

@@ -5,7 +5,8 @@ var path = require('path'),
     fs = require('fs'),
     minify = require('html-minifier').minify,
     uglifyjs = require('uglifyjs'),
-    CleanCSS = require('clean-css');
+    CleanCSS = require('clean-css'),
+    less = require('less');
 
 function renderPartial(dir, partial, global, parent) {
     var file = path.resolve(dir, partial);
@@ -58,21 +59,60 @@ module.exports = {
         }
     },
     '.jshtml': function(params) {
-        params.destination = path.join(path.dirname(params.destination), path.basename(params.destination, '.jshtml') + '.html')
+        params.destination = path.join(path.dirname(params.destination), path.basename(params.destination, '.jshtml') + '.html');
         var parentContext = {
             layout: path.resolve(params.rootDirectory, './views/private/_layout.jshtml'),
             rendered: ''
         };
+        
         var globalContext = { };
         parentContext.rendered = renderPartial(__dirname, params.source, globalContext, parentContext).render();
-        return minify(renderPartial(__dirname, parentContext.layout, globalContext, parentContext).render(), htmlMinifyOptions);
+
+        var ret = renderPartial(__dirname, parentContext.layout, globalContext, parentContext).render();
+        if(!params.debug) {
+            ret = minify(ret, htmlMinifyOptions);
+        }
+        
+        return ret;
+    },
+    '.html': function(params) {
+        var ret = fs.readFileSync(params.source).toString();
+        if(!params.debug) {
+            ret = minify(ret, htmlMinifyOptions);
+        }
+        return ret;
+    },
+    '.htm': function(params) {
+        this['.html'](params);
     },
     '.js': function(params) {
-        var ast = uglifyjs.parse(fs.readFileSync(params.source).toString());
-        ast.figure_out_scope();
-        return ast.transform(uglifyjs.Compressor()).print_to_string();
+        var ret = fs.readFileSync(params.source).toString();
+        if(!params.debug) {
+            var ast = uglifyjs.parse(ret);
+            ast.figure_out_scope();
+            ret = ast.transform(uglifyjs.Compressor()).print_to_string();
+        }
+        return ret;
     },
     '.css': function(params) {
-        return new CleanCSS().minify(fs.readFileSync(params.source).toString()).styles;
+        var ret = fs.readFileSync(params.source).toString();
+        if(!params.debug) {
+            ret = new CleanCSS().minify(ret).styles;
+        }
+        return ret;
+    },
+    '.less': function(params) {
+        var ret;
+        less.render((ret = fs.readFileSync(params.source).toString()), {
+            paths: [ path.dirname(params.source) ],
+            filename: params.source,
+            compress: !params.debug
+        }, function (e, output) {
+            if(!e) {
+                ret = output.css;
+                params.destination = path.join(path.dirname(params.destination), path.basename(params.destination, '.less') + '.css');
+            }
+        });
+        return ret;
     }
 };
