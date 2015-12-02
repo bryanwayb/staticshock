@@ -44,10 +44,10 @@ var docsDir = path.resolve(__dirname, '../docs/mvc'),
         minifyCSS: true
     };
 var serverPostBuild = {
-    'apache2': function(out) {
+    apache2: function(out) {
         fs.createReadStream(path.join(docsDir, '.htaccess')).pipe(fs.createWriteStream(path.join(out, '.htaccess')));
     }
-}
+};
 
 module.exports = {
     _postBuild: function(outputDirectory, options) {
@@ -64,7 +64,7 @@ module.exports = {
             layout: path.resolve(params.rootDirectory, './views/private/_layout.jshtml'),
             rendered: ''
         };
-        
+
         var globalContext = { };
         parentContext.rendered = renderPartial(__dirname, params.source, globalContext, parentContext).render();
 
@@ -72,7 +72,7 @@ module.exports = {
         if(!params.debug) {
             ret = minify(ret, htmlMinifyOptions);
         }
-        
+
         return ret;
     },
     '.html': function(params) {
@@ -107,7 +107,7 @@ module.exports = {
             paths: [ path.dirname(params.source) ],
             filename: params.source,
             compress: !params.debug
-        }, function (e, output) {
+        }, function(e, output) {
             if(!e) {
                 ret = output.css;
                 params.destination = path.join(path.dirname(params.destination), path.basename(params.destination, '.less') + '.css');

@@ -95,6 +95,7 @@ function recursiveCheckDirectory(dir) {
 recursiveCheckDirectory(path.resolve(__dirname, '../bin'));
 recursiveCheckDirectory(path.resolve(__dirname, '../lib'));
 recursiveCheckDirectory(path.resolve(__dirname, '../test'));
+recursiveCheckDirectory(path.resolve(__dirname, '../controllers'));
 
 console.log('\n' + (totalFiles - returnCode) + '/' + totalFiles + ' files passed (' + totalErrorsInFiles + ' error' + (totalErrorsInFiles === 1 ? '' : 's') + ', ' + totalFixableErrorsInFiles + ' fix' + (allowFix ? 'ed' : 'able') + ')');
 
