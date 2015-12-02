@@ -47,6 +47,7 @@ module.exports = {
         }
     },
     '.jshtml': function(params) {
+        params.destination = path.join(path.dirname(params.destination), path.basename(params.destination, '.jshtml') + '.html')
         var parentContext = {
             layout: path.resolve(params.rootDirectory, './views/private/_layout.jshtml'),
             rendered: ''
