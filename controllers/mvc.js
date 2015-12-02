@@ -28,13 +28,16 @@ function renderPartial(jshtml, dir, partial, global, parent) {
     return script;
 }
 
-module.exports = function(jshtml, file) {
-    var parentContext = {
-        layout: './views/private/_layout.jshtml',
-        rendered: ''
-    };
-    var globalContext = { };
-    var partial = renderPartial(jshtml, __dirname, file, globalContext, parentContext);
-    parentContext.rendered = partial.render();
-    return renderPartial(jshtml, __dirname, parentContext.layout, globalContext, parentContext);
+module.exports = {
+    '.jshtml': function(params) {
+        console.log(params);
+        /*var parentContext = {
+            layout: './views/private/_layout.jshtml',
+            rendered: ''
+        };
+        var globalContext = { };
+        var partial = renderPartial(jshtml, __dirname, file, globalContext, parentContext);
+        parentContext.rendered = partial.render();
+        return renderPartial(jshtml, __dirname, parentContext.layout, globalContext, parentContext);*/
+    }
 };

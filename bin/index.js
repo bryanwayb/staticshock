@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 'use strict';
 
 var helpout = require('helpout'),
@@ -39,5 +40,28 @@ var cwd = process.cwd(),
 	out = path.resolve(cwd, args._[1] || cwd);
 
 var ss = staticshock(root, out);
-ss.setController(path.join(root, '.controller.js'));
-ss.build();
+if(!ss.setIgnoreFile(path.join(root, '.ignore'))) {
+    console.warn('Continuing without .ignore');
+}
+
+if(args.controller) {
+    if(!ss.defaultController(args.controller)) {
+        console.error('Unable to load controller \'' + args.controller + '\'');
+        process.exit(1);
+    }
+}
+else {
+    try {
+        ss.Controller = require(path.join(root, '.controller.js'));
+    }
+    catch(ex) {
+        console.warn('Continuing without .controller.js');
+    }
+}
+
+if(args.c || args.clean) {
+    ss.clean();
+}
+else {
+    ss.build(args.r || args.rebuild);
+}

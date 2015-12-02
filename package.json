@@ -2,7 +2,7 @@
   "name": "staticshock",
   "version": "0.0.1",
   "description": "Yet another static site generator",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "bin": {
     "staticshock": "./bin/index.js"
   },
