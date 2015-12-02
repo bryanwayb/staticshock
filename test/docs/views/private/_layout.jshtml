@@ -1,0 +1,10 @@
+<html>
+	<head>
+		<title><?js:parent.title?></title>
+	</head>
+	<body>
+		<h1><?js:parent.title?></h1>
+		<?js:parent.rendered?>
+		<?js:controller.partial('./_partial.jshtml')?>
+	</body>
+</html>
