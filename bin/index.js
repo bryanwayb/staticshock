@@ -21,8 +21,13 @@ if(args.h || args.help || (process.argv.length <= 2)) {
         sections: {
             Options: {
                 options: {
+                    '-c, --clean': 'Cleans the build output directory (does not perform build)',
+                    '-r, --rebuild': 'Performs a clean before building instead of building over the current output directory contents',
+                    '--controller': 'Sets a controller to use for build generation. This will override use of a custom controller',
+                    '--server': 'Passes a server to build for to the build controller',
+                    '--debug': 'Tells the controller to build with debugging in mind',
                     '-v, --version': 'Prints the version/author info in the output header',
-                    '-h, --help': 'Prints this help information.'
+                    '-h, --help': 'Prints this help information'
                 }
             }
         }
