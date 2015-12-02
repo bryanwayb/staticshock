@@ -63,5 +63,7 @@ if(args.c || args.clean) {
     ss.clean();
 }
 else {
-    ss.build(args.r || args.rebuild);
+    ss.build(args.r || args.rebuild, {
+        server: args.server
+    });
 }

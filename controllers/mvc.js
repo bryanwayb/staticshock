@@ -1,8 +1,10 @@
 'use strict';
 
-var path = require('path');
+var path = require('path'),
+    jshtml = require('js-html'),
+    fs = require('fs');
 
-function renderPartial(jshtml, dir, partial, global, parent) {
+function renderPartial(dir, partial, global, parent) {
     var file = path.resolve(dir, partial);
     var child = { };
     var script = jshtml.script({
@@ -10,7 +12,7 @@ function renderPartial(jshtml, dir, partial, global, parent) {
             jshtml: jshtml,
             controller: {
                 partial: function(partial) {
-                    return renderPartial(jshtml, path.dirname(file), partial, global, child).render();
+                    return renderPartial(path.dirname(file), partial, global, child).render();
                 }
             },
             global: global,
@@ -28,16 +30,29 @@ function renderPartial(jshtml, dir, partial, global, parent) {
     return script;
 }
 
+var docsDir = path.resolve(__dirname, '../docs/mvc');
+var serverPostBuild = {
+    'apache2': function(out) {
+        fs.createReadStream(path.join(docsDir, '.htaccess')).pipe(fs.createWriteStream(path.join(out, '.htaccess')));
+    }
+}
+
 module.exports = {
+    _postBuild: function(outputDirectory, options) {
+        if(options) {
+            var serverFunc = serverPostBuild[options.server || 'apache2'];
+            if(serverFunc) {
+                serverFunc(outputDirectory);
+            }
+        }
+    },
     '.jshtml': function(params) {
-        console.log(params);
-        /*var parentContext = {
-            layout: './views/private/_layout.jshtml',
+        var parentContext = {
+            layout: path.resolve(params.rootDirectory, './views/private/_layout.jshtml'),
             rendered: ''
         };
         var globalContext = { };
-        var partial = renderPartial(jshtml, __dirname, file, globalContext, parentContext);
-        parentContext.rendered = partial.render();
-        return renderPartial(jshtml, __dirname, parentContext.layout, globalContext, parentContext);*/
+        parentContext.rendered = renderPartial(__dirname, params.source, globalContext, parentContext).render();
+        return renderPartial(__dirname, parentContext.layout, globalContext, parentContext).render();
     }
 };
