@@ -1,3 +1,4 @@
 {
-	"controller": "mvc"
+	"controller": "mvc",
+	"optimize": true
 }

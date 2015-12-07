@@ -47,7 +47,7 @@ else {
         clean: args.c || args.clean
     }).on('log', function(message, error) {
         if(error) {
-            if(error instanceof Error) {
+            if(error !== true) {
                 console.log(colors.red('ERROR: ' + message + '\n\n' + error.toString()));
             }
             else {
