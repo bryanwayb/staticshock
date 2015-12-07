@@ -4,7 +4,8 @@
 var helpout = require('helpout'),
 	npmPackage = require('../package.json'),
 	path = require('path'),
-    staticshock = require('../lib/index2.js');
+    staticshock = require('../lib/index2.js'),
+    colors = require('colors');
 
 var args = require('minimist')(process.argv.slice(2));
 
@@ -39,6 +40,17 @@ else {
         root: path.resolve(cwd, args.root || cwd),
         out: path.resolve(cwd, args.out || 'build')
     }).on('log', function(message, error) {
-        console.log(message);
+        if(error) {
+            if(error instanceof Error) {
+                console.log(colors.red('ERROR: ' + message + '\n\n' + error.toString()));
+            }
+            else {
+                console.log(colors.red('ERROR: ' + message));
+            }
+            process.exit(1);
+        }
+        else {
+            console.log(message);
+        }
     }).build();
 }
