@@ -4,7 +4,7 @@
 var helpout = require('helpout'),
 	npmPackage = require('../package.json'),
 	path = require('path'),
-    staticshock = require('../lib/index2.js'),
+    staticshock = require('../lib/index.js'),
     colors = require('colors');
 
 var args = require('minimist')(process.argv.slice(2));
@@ -35,10 +35,16 @@ if(args.h || args.help) {
     }));
 }
 else {
-    var cwd = process.cwd();
+    var cwd = process.cwd(),
+        root = path.resolve(cwd, args.root || cwd);
+    console.log('Starting build of ' + root);
+    if(args.verbose) {
+        console.log('--------');
+    }
     staticshock({
-        root: path.resolve(cwd, args.root || cwd),
-        out: path.resolve(cwd, args.out || 'build')
+        root: root,
+        out: path.resolve(cwd, args.out || 'build'),
+        clean: args.c || args.clean
     }).on('log', function(message, error) {
         if(error) {
             if(error instanceof Error) {
@@ -49,8 +55,12 @@ else {
             }
             process.exit(1);
         }
-        else {
+        else if(args.verbose) {
             console.log(message);
         }
     }).build();
+    if(args.verbose) {
+        console.log('--------');
+    }
+    console.log('Build complete!');
 }
