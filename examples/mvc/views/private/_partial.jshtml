@@ -1,1 +1,1 @@
-This is a partial located in <?js:require('path').basename(__filename)?>
+This is a partial located in <?js:__filename?>
