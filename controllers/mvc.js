@@ -1,6 +1,8 @@
-module.exports = function(instance, helper, options) {
-	return {
-		'.jshtml': function(param) {
+'use strict';
+
+/*module.exports = function(instance, helper, options) {
+    return {
+        '.jshtml': function(param) {
 		}
-	};
-};
+    };
+};*/
