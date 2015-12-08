@@ -7,7 +7,7 @@ module.exports = function(instance, handler, options) {
     return {
         PostBuild: function() {
             if(options.isRoot) {
-                handler.MergeFiles(handler.Enums.ServerConfigTypes[options.server], path.join(options.root, handler.Enums.ConfigFileName[options.server]), path.resolve(__dirname, '../docs/mvc/' + handler.Enums.ConfigFileName[options.server]), path.join(options.out, handler.Enums.ConfigFileName[options.server]));
+                handler.MergeFiles(handler.Enums.ServerConfigTypes[options.server], path.join(options.root, handler.Enums.ConfigFileName[options.server]), path.resolve(__dirname, handler.Enums.ConfigFileName[options.server]), path.join(options.out, handler.Enums.ConfigFileName[options.server]));
             }
         },
         '.html': function(param) {
