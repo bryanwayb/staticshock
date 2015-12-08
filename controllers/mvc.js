@@ -3,12 +3,13 @@
 var path = require('path'),
 	jshtml = require('js-html');
 
-function renderPartial(instance, file, partial) {
-    return instance.buildFile(path.resolve(path.dirname(file), partial)).content;
-}
-
 module.exports = function(instance, handler, options) {
     return {
+        PostBuild: function() {
+            if(options.isRoot) {
+                handler.MergeFiles(handler.Enums.ServerConfigTypes[options.server], path.resolve(__dirname, '../docs/mvc/' + handler.Enums.ConfigFileName[options.server]), path.join(options.root, handler.Enums.ConfigFileName[options.server]), path.join(options.out, handler.Enums.ConfigFileName[options.server]));
+            }
+        },
         '.html': function(param) {
             param.content = handler.HTML(param.content);
         },
@@ -35,7 +36,7 @@ module.exports = function(instance, handler, options) {
                 context: {
                     controller: {
                         partial: function(partial) {
-                            return renderPartial(instance, param.source, partial);
+                            return instance.buildFile(path.resolve(path.dirname(param.source), partial)).content;
                         }
                     },
                     view: viewContext
@@ -56,7 +57,7 @@ module.exports = function(instance, handler, options) {
 
                 script.setScriptFile(viewContext.layout);
                 opts.context.controller.partial = function(partial) {
-                    return renderPartial(instance, viewContext.layout, partial);
+                    return instance.buildFile(path.resolve(path.dirname(viewContext.layout), partial)).content;
                 };
                 opts.filename = viewContext.layout;
             }

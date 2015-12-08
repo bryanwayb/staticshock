@@ -36,14 +36,15 @@ if(args.h || args.help) {
 }
 else {
     var cwd = process.cwd(),
-        root = path.resolve(cwd, args.root || cwd);
+        root = path.resolve(cwd, args.root || cwd),
+        out = path.resolve(cwd, args.out || 'build');
     console.log('Starting build of ' + root);
     if(args.verbose) {
         console.log('--------');
     }
     staticshock({
         root: root,
-        out: path.resolve(cwd, args.out || 'build'),
+        out: out,
         clean: args.c || args.clean
     }).on('log', function(message, error) {
         if(error) {
@@ -62,5 +63,5 @@ else {
     if(args.verbose) {
         console.log('--------');
     }
-    console.log('Build complete!');
+    console.log('Build complete!\nOutput directory: ' + out);
 }
