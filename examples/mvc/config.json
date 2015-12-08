@@ -1,4 +1,5 @@
 {
 	"controller": "mvc",
-	"optimize": true
+	"optimize": true,
+	"server": "apache2.4"
 }
