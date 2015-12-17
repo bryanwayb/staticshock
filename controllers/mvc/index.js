@@ -51,7 +51,7 @@ module.exports = function(instance, handler, options) {
             };
 
             var script = jshtml.script(param.content, opts);
-            if(instance._buildFileTree.length <= 1) {
+            if(!instance._buildFileTree || instance._buildFileTree.length <= 1) {
                 viewContext.rendered = script.render();
                 script = jshtml.script(opts);
 
