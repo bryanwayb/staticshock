@@ -27,20 +27,28 @@ module.exports = function(instance, handler, options) {
             param.output = path.join(path.dirname(param.output), path.basename(param.output, '.less') + '.css');
         },
         '.jshtml': function(param) {
-            var viewContext = {
-                layout: path.resolve(options.relative, './views/private/_layout.jshtml'),
-                rendered: ''
+            var scriptContext = {
+                controller: {
+                    partial: function(partial) {
+                        return instance.buildFile(path.resolve(path.dirname(param.source), partial)).content;
+                    }
+                },
+                view: {
+                    layout: path.resolve(options.relativeRoot, './views/private/_layout.jshtml'),
+                    rendered: ''
+                }
             };
 
+            if(param.context) {
+                for(var i in param.context) {
+                    if(param.context.hasOwnProperty(i)) {
+                        scriptContext[i] = param.context[i];
+                    }
+                }
+            }
+
             var opts = {
-                context: {
-                    controller: {
-                        partial: function(partial) {
-                            return instance.buildFile(path.resolve(path.dirname(param.source), partial)).content;
-                        }
-                    },
-                    view: viewContext
-                },
+                context: scriptContext,
                 filename: param.output,
                 syntaxCheck: true,
                 format: true,
@@ -51,15 +59,15 @@ module.exports = function(instance, handler, options) {
             };
 
             var script = jshtml.script(param.content, opts);
-            if(instance._buildFileTree.length <= 1) {
-                viewContext.rendered = script.render();
+            if(!instance._buildFileTree || instance._buildFileTree.length <= 1) {
+                scriptContext.view.rendered = script.render();
                 script = jshtml.script(opts);
 
-                script.setScriptFile(viewContext.layout);
+                script.setScriptFile(scriptContext.view.layout);
                 opts.context.controller.partial = function(partial) {
-                    return instance.buildFile(path.resolve(path.dirname(viewContext.layout), partial)).content;
+                    return instance.buildFile(path.resolve(path.dirname(scriptContext.view.layout), partial)).content;
                 };
-                opts.filename = viewContext.layout;
+                opts.filename = scriptContext.view.layout;
             }
             param.content = handler.HTML(script.render());
             param.output = path.join(path.dirname(param.output), path.basename(param.output, '.jshtml') + '.html');
