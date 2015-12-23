@@ -39,14 +39,22 @@ module.exports = function(instance, handler, options) {
                 },
                 options: options
             };
-
-            if(param.context) {
-                for(var i in param.context) {
-                    if(param.context.hasOwnProperty(i)) {
-                        scriptContext[i] = param.context[i];
+            
+            scriptContext = (function recurse(opts, def) {
+                if(opts == null) {
+                    opts = def;
+                }
+                else {
+                    if(typeof def === 'object') {
+                        for(var entry in def) {
+                            if(def.hasOwnProperty(entry)) {
+                                opts[entry] = recurse(opts[entry], def[entry]);
+                            }
+                        }
                     }
                 }
-            }
+                return opts;
+            })(param.context, scriptContext);
 
             var opts = {
                 context: scriptContext,
