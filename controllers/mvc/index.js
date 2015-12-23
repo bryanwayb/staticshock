@@ -39,7 +39,7 @@ module.exports = function(instance, handler, options) {
                 },
                 options: options
             };
-            
+
             scriptContext = (function recurse(opts, def) {
                 if(opts == null) {
                     opts = def;
