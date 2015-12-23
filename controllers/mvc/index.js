@@ -58,7 +58,7 @@ module.exports = function(instance, handler, options) {
 
             var opts = {
                 context: scriptContext,
-                filename: param.output,
+                filename: param.source,
                 syntaxCheck: true,
                 format: true,
                 mangle: true,
