@@ -36,7 +36,8 @@ module.exports = function(instance, handler, options) {
                 view: {
                     layout: path.resolve(options.relativeRoot, './views/private/_layout.jshtml'),
                     rendered: ''
-                }
+                },
+                options: options
             };
 
             if(param.context) {
