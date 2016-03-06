@@ -6,5 +6,5 @@ RewriteRule ^$ /home
 RewriteCond %{DOCUMENT_ROOT}/views/%{REQUEST_URI} -d
 RewriteRule (.+) /$1/index
 RewriteCond %{DOCUMENT_ROOT}/views/%{REQUEST_URI}.html -f
-RewriteRule (.+) /views/$1.html [L]
+RewriteRule (.+) /views/$1.html
 </IfModule>
