@@ -23,7 +23,7 @@ module.exports = function(instance, handler, options) {
             param.content = handler.JS(param.content);
         },
         '.less': function(param) {
-            param.content = handler.LESS(param.content);
+            param.content = handler.LESS(param.content, param.source);
             param.output = path.join(path.dirname(param.output), path.basename(param.output, '.less') + '.css');
         },
         '.jshtml': function(param) {
