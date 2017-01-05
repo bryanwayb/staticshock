@@ -1,0 +1,2 @@
+# staticshock
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b02c7e676814d028e1fd238ed101936)](https://www.codacy.com/app/bryanwayb/staticshock?utm_source=github.com&utm_medium=referral&utm_content=bryanwayb/staticshock&utm_campaign=badger)
