@@ -48,11 +48,9 @@ else {
         clean: args.c || args.clean
     }).on('log', function(message, error) {
         if(error) {
+			console.log(colors.red('ERROR: ' + message));
             if(error !== true) {
-                console.log(colors.red('ERROR: ' + message + '\n\n' + error.toString()));
-            }
-            else {
-                console.log(colors.red('ERROR: ' + message));
+                throw error;
             }
             process.exit(1);
         }

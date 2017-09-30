@@ -39,7 +39,7 @@
     "js-html": "^0.3.1",
     "less": "^2.5.3",
     "minimist": "^1.2.0",
-    "uglifyjs": "^2.4.10"
+    "uglify-js": "^3.1.2"
   },
   "devDependencies": {
     "jscs": "^2.5.1",
